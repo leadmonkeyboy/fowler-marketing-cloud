@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title></title>
+        <title>San Diego State University - Fowler School of Business Profile &amp; Subscription Center</title>
 
         <meta name="viewport" content="initial-scale=1" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
