@@ -1,0 +1,78 @@
+﻿@import 'variables.scss';
+
+@import 'bootstrap/scss/bootstrap.scss';
+
+h1 {
+	color: $color-sdsu-red;
+	text-align: right;
+
+	span {
+		display: block;
+	}
+
+	@include media-breakpoint-down('sm') {
+		text-align: center;
+	}
+}
+
+.navbar {
+	background-color: $white;
+	box-shadow: 0 0 8px -5px;
+	margin-bottom: 2.0rem;
+
+	@include media-breakpoint-down('sm') {
+		.container {
+			justify-content: center;
+		}
+
+		.navbar-brand {
+			margin-right: 0px;
+		}
+	}
+}
+
+.card {
+	border-radius: 10px;
+	border-width: 2px;
+	border-color: $gray-400;
+	box-shadow: 0 0 8px -5px;
+
+	margin-bottom: 2.0rem;
+}
+
+form {
+	&.profile {
+		text-align: center;
+
+		label {
+			display: block;
+		}
+
+		.row {
+			margin-bottom: 1.0rem;
+			text-align: left;
+		}
+	}
+
+	&.subscription {
+		margin-bottom: 1.0rem;
+	}
+
+	button {
+		&.btn-primary {
+			background-color: $white;
+			color: $body-color;
+			border-color: $color-sdsu-red;
+
+			&:hover {
+				background-color: $color-sdsu-red;
+			}
+		}
+
+		&.btn-secondary {
+			background-color: $white;
+			color: $body-color;
+			border-color: $gray-400;
+		}
+	}
+}
