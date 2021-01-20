@@ -7403,6 +7403,11 @@ h1, .h1 {
     h1, .h1 {
       text-align: center; } }
 
+a {
+  color: #212529; }
+  a:hover {
+    color: #A6192E; }
+
 .navbar {
   background-color: #fff;
   box-shadow: 0 0 8px -5px;

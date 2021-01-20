@@ -25,22 +25,22 @@
                             <form action="#" method="post" class="profile needs-validation">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label for="profile-email" class="form-label">Email</label>
-                                        <input type="email" id="profile-email" class="form-control" required/>
-                                    </div>                    
-                                    <div class="col-sm-6">
-                                        <label for="profile-mobile-phone" class="form-label">Mobile Phone</label>
-                                        <input type="tel" id="profile-mobile-phone" class="form-control" required/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
                                         <label for="profile-first-name" class="form-label">First Name</label>
                                         <input type="text" id="profile-first-name" class="form-control" required/>
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="profile-last-name" class="form-label">Last Name</label>
                                         <input type="text" id="profile-last-name" class="form-control" required/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="profile-email" class="form-label">Email</label>
+                                        <input type="email" id="profile-email" class="form-control" required/>
+                                    </div>                    
+                                    <div class="col-sm-6">
+                                        <label for="profile-mobile-phone" class="form-label">Mobile Phone</label>
+                                        <input type="tel" id="profile-mobile-phone" class="form-control" required/>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -96,9 +96,7 @@
                                 <button type="submit" class="btn btn-primary">Update Preferences</button>
                             </form>
 
-                            <form action="#" method="post">
-                                <button type="submit" class="btn btn-secondary">Unsubscribe All</button>
-                            </form>
+                            <a href="#">Unsubscribe All</a>
                         </div>
                     </div>
                 </div>
