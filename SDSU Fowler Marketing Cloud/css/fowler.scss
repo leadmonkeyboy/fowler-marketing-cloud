@@ -48,6 +48,15 @@ a {
 	margin-bottom: 2.0rem;
 }
 
+.alert {
+	&.alert-primary {
+		background-color: rgba( $color-sdsu-red, 0.5 );
+		border-color: $color-sdsu-red;
+		color: $body-color;
+		padding: 1.0em 2.0em;
+	}
+}
+
 form {
 	&.profile {
 		text-align: center;

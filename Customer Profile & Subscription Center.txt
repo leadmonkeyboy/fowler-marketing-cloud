@@ -1,0 +1,439 @@
+<script runat="server">
+  Platform.Load("Core","1.1.1");
+  try{
+</script>
+
+%%[
+
+/* 
+sbowen@avisan.com lead, "00Q3k00001SOXnBEAX" 
+sbowen@avisan.com contact "0033k00003RsznSAAR" 
+replace with query param (_subscriberkey) when ready to go live    
+*/
+
+SET @id = _subscriberkey
+SET @subscriberFound = "False"
+SET @isLead = "False"
+SET @isContact = "False"
+SET @updateProfile = "False"
+SET @updatePreferences = "False"
+SET @unsubscribe = "False"
+SET @message = ""
+SET @HasOptedOutOfEmail = "False"
+
+IF NOT EMPTY(@id) THEN
+ IF @subscriberFound == "False" THEN
+  SET @subscriberRows = RetrieveSalesforceObjects(
+  "Lead",
+  "Id,FirstName,LastName,Email,MobilePhone,Street,City,State,PostalCode,Country,HasOptedOutOfEmail",
+  "Id", "=", @id
+  )
+
+  IF RowCount(@subscriberRows) > 0 THEN
+   SET @recordType = "Lead"
+   SET @isLead = "True"
+   SET @subscriberFound = "True"
+  ENDIF
+ ENDIF
+
+ IF @subscriberFound == "False" THEN
+  SET @subscriberRows = RetrieveSalesforceObjects(
+  "Contact",
+  "Id,FirstName,LastName,Email,MobilePhone,MailingStreet,MailingCity,MailingState,MailingPostalCode,MailingCountry,TargetX_Email__emailGroups__c,HasOptedOutOfEmail",
+  "Id", "=", @id
+  )
+
+  IF RowCount(@subscriberRows) > 0 THEN
+   SET @recordType = "Contact"
+   SET @isContact = "True"
+   SET @subscriberFound = "True"
+  ENDIF
+ ENDIF
+
+ IF @subscriberFound == "True" THEN
+  SET @row = row(@subscriberRows,1)
+  SET @FirstName = field(@row,"FirstName")
+  SET @LastName = field(@row,"LastName")
+  SET @Email = field(@row,"Email")
+  SET @MobilePhone = field(@row,"MobilePhone")
+  
+  IF @isLead == "True" THEN
+   SET @Street = field(@row,"Street")
+   SET @City = field(@row,"City")
+   SET @State = field(@row,"State")
+   SET @PostalCode = field(@row,"PostalCode")
+   SET @Country = field(@row,"Country")
+   SET @EmailGroups = ""
+  ENDIF
+  
+  IF @isContact == "True" THEN
+   SET @Street = field(@row,"MailingStreet")
+   SET @City = field(@row,"MailingCity")
+   SET @State = field(@row,"MailingState")
+   SET @PostalCode = field(@row,"MailingPostalCode")
+   SET @Country = field(@row,"MailingCountry")
+   SET @EmailGroups = field(@row,"TargetX_Email__emailGroups__c")
+  ENDIF
+  
+  SET @MarketingEmailGroup = "False"
+  SET @ProgramsEmailGroup = "False"
+  SET @UnknownEmailGroups = ""
+  
+  IF @EmailGroups != "" THEN
+	SET @EmailGroupSet = BUILDROWSETFROMSTRING(@EmailGroups,';')
+	
+	FOR @index = 1 TO ROWCOUNT(@EmailGroupSet) DO
+		SET @EmailGroup = FIELD(ROW(@EmailGroupSet,@index),1)
+		SET @EmailGroupFound = "False"
+		
+		IF @EmailGroup == "Marketing Emails" THEN
+			SET @MarketingEmailGroup = "True"
+			SET @EmailGroupFound = "True"
+		ENDIF
+		
+		IF @EmailGroup == "Program Emails" THEN
+			SET @ProgramsEmailGroup = "True"
+			SET @EmailGroupFound = "True"
+		ENDIF
+		
+		IF @EmailGroupFound == "False" THEN
+			IF @UnknownEmailGroups == "" THEN
+				SET @UnknownEmailGroups = @EmailGroup
+			ELSE
+				SET @UnknownEmailGroups = CONCAT( @UnknownEmailGroups, ";", @EmailGroup)
+			ENDIF
+		ENDIF
+	NEXT @index
+  ENDIF
+  
+  SET @HasOptedOutOfEmail = IIF( field(@row,"HasOptedOutOfEmail"), "True", "False" )
+ ELSE
+  SET @message = "No subscriber found."
+ ENDIF
+ELSE
+  SET @message = "No subscriber selected."
+ENDIF
+
+IF RequestParameter("update-profile") == true THEN
+
+ SET @updateProfile = "True"
+ SET @FirstName = RequestParameter("profile-first-name")
+ SET @LastName = RequestParameter("profile-last-name")
+ SET @Email = RequestParameter("profile-email")
+ SET @MobilePhone = RequestParameter("profile-mobile-phone")
+ SET @Street = RequestParameter("profile-street-1")
+ SET @City = RequestParameter("profile-city")
+ SET @State = RequestParameter("profile-state")
+ SET @PostalCode = RequestParameter("profile-postal-code")
+ SET @Country = RequestParameter("profile-country")
+
+ IF @isLead == "True" THEN
+  SET @updateResult = UpdateSingleSalesforceObject(
+   @recordType, @id,
+   "FirstName", @FirstName,
+   "LastName", @LastName,
+   "Email", @Email,
+   "MobilePhone", @MobilePhone,
+   "Street", @Street,
+   "City", @City,
+   "State", @State,
+   "PostalCode", @PostalCode,
+   "Country", @Country
+  )
+ ENDIF
+
+ IF @isContact == "True" THEN
+  SET @updateResult = UpdateSingleSalesforceObject(
+   @recordType, @id,
+   "FirstName", @FirstName,
+   "LastName", @LastName,
+   "Email", @Email,
+   "MobilePhone", @MobilePhone,
+   "MailingStreet", @Street,
+   "MailingCity", @City,
+   "MailingState", @State,
+   "MailingPostalCode", @PostalCode,
+   "MailingCountry", @Country
+  )
+ ENDIF
+ /* update email in All Subscribers list */
+ IF @Email != AttributeValue("emailaddr") THEN
+  SET @Subscriber = CreateObject("Subscriber")
+  SetObjectProperty(@Subscriber, "SubscriberKey", @id)
+  SetObjectProperty(@Subscriber, "EmailAddress", @Email)
+  SET @Status = InvokeUpdate(@Subscriber, @createErrDesc, @createErrNo, @createOpts)
+ ENDIF
+
+ IF @updateResult == 1 THEN
+  SET @message = "Your profile has been successfully updated."
+ ELSE
+  SET @message = "Failed to updated your profile."
+ ENDIF
+ENDIF
+
+IF RequestParameter("update-preferences") == true THEN  
+  SET @EmailGroups = @UnknownEmailGroups
+  
+  IF RequestParameter("preference-newsletter") == "on" THEN
+  	SET @MarketingEmailGroup = "True"
+  	SET @EmailGroups = CONCAT( "Marketing Emails", ";", @EmailGroups )
+  ELSE
+  	SET @MarketingEmailGroup = "False"
+  ENDIF
+  
+  IF RequestParameter("preference-events") == "on" THEN
+  	SET @ProgramsEmailGroup = "True"
+  	SET @EmailGroups = CONCAT( "Program Emails", ";", @EmailGroups )
+  ELSE
+  	SET @ProgramsEmailGroup = "False"
+  ENDIF
+    
+	 IF @isContact == "True" THEN
+	  SET @updateResult = UpdateSingleSalesforceObject(
+	   @recordType, @id,
+	   "TargetX_Email__emailGroups__c", @EmailGroups
+	  )
+	 ENDIF
+	 
+  SET @message = "Your preferences have been successfully updated."
+	 
+ENDIF
+
+IF RequestParameter("subscribe") == true THEN
+ SET @HasOptedOutOfEmail = "False";
+
+ SET @updateResult = UpdateSingleSalesforceObject(
+  @recordType, @id,
+  "HasOptedOutOfEmail", @HasOptedOutOfEmail
+ )
+
+ /* set subscriber status to active in All Subscribers */  
+ SET @Subscriber = CreateObject("Subscriber")
+ SetObjectProperty(@Subscriber, "SubscriberKey", @id)
+ SetObjectProperty(@Subscriber, "EmailAddress", @Email)
+ SetObjectProperty(@Subscriber, "Status", "Active" )
+ SET @Status = InvokeUpdate(@Subscriber, @createErrDesc, @createErrNo, @createOpts)
+
+ IF @updateResult == 1 THEN
+  SET @message = "You have successfully resubscribed to our e-mail list."
+ ELSE
+  SET @message = "Failed to resubscribe your e-mail to our list."
+ ENDIF
+
+ENDIF
+
+IF RequestParameter("unsubscribe") == true THEN
+ SET @HasOptedOutOfEmail = "True";
+
+ SET @updateResult = UpdateSingleSalesforceObject(
+  @recordType, @id,
+  "HasOptedOutOfEmail", @HasOptedOutOfEmail
+ )
+ 
+ /* log unsubscribe event to mark as unsubscribed in All Subscribers */
+ SET @reason = "Unsubscribed through custom subscription center"
+
+ SET @lue = CreateObject("ExecuteRequest")
+ SETObjectProperty(@lue,"Name","LogUnsubEvent")
+
+ SET @lue_prop = CreateObject("APIProperty")
+ SETObjectProperty(@lue_prop, "Name", "SubscriberKey")
+ SETObjectProperty(@lue_prop, "Value", @id)
+ AddObjectArrayItem(@lue, "Parameters", @lue_prop)
+
+ SET @lue_prop = CreateObject("APIProperty")
+ SETObjectProperty(@lue_prop, "Name", "Reason")
+ SETObjectProperty(@lue_prop, "Value", @reason)
+ AddObjectArrayItem(@lue, "Parameters", @lue_prop) 
+
+ SET @lue_statusCode = InvokeExecute(@lue, @overallStatus, @requestId)
+ 
+ IF @updateResult == 1 THEN
+  SET @message = "You have successfully unsubscribed from our e-mail list."
+ ELSE
+  SET @message = "Failed to unsubscribe your e-mail from our list."
+ ENDIF
+
+ENDIF
+
+]%%
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>San Diego State University - Global Campus Profile &amp; Subscription Center</title>
+
+        <meta name="viewport" content="initial-scale=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <link href="%%=CloudPagesURL(216)=%%" rel="stylesheet" />
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    </head>
+    <body>    
+        <nav class="navbar justify-content-between">
+            <div class="container">
+                <a href="#" class="navbar-brand"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/29bf304b-470b-46f8-832f-0b8a30050e82.jpg" alt="San Diego State University - Global Campus" /></a>
+                <h1><span>Communication</span> <span>Preferences</span></h1>
+            </div>
+        </nav>
+
+        <div class="container">
+        	<!--<table>
+        		<tr>
+        			<td>Version</td>
+        			<td>00001</td>
+        		</tr>
+        	
+        		<tr>
+        			<td>Email Groups</td>
+        			<td>%%=v(@EmailGroups)=%%</td>
+        		</tr>
+        		<tr>
+        			<td>Rows</td>
+        			<td>%%=v(rowcount(@EmailGroupSet))=%%</td>
+        		</tr>
+        		<tr>
+        			<td>Marketing Emails</td>
+        			<td>%%=v(@MarketingEmailGroup)=%%</td>
+        		</tr>
+        		<tr>
+        			<td>Program Emails</td>
+        			<td>%%=v(@ProgramsEmailGroup)=%%</td>
+        		</tr>
+        		<tr>
+        			<td>Unknown</td>
+        			<td>%%=v(@UnknownEmailGroups)=%%</td>
+        		</tr>
+        	</table>-->
+        	
+        	
+           %%[ IF LENGTH(@message) != 0 THEN ]%%
+            <div class="alert alert-primary" role="alert">
+                %%=v(@message)=%%
+            </div>
+           %%[ ENDIF ]%%
+
+           %%[ IF @subscriberFound == "True" THEN ]%%
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">My Profile</h2>
+                            <form action="%%=RequestParameter('PAGEURL')=%%" method="post" class="profile needs-validation">
+                               <input name="update-profile" type="hidden" value="true">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="profile-first-name" class="form-label">First Name</label>
+                                        <input type="text" id="profile-first-name" name="profile-first-name" class="form-control" value="%%=v(@FirstName)=%%" required/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="profile-last-name" class="form-label">Last Name</label>
+                                        <input type="text" id="profile-last-name" name="profile-last-name" class="form-control" value="%%=v(@LastName)=%%" required/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="profile-email" class="form-label">Email</label>
+                                        <input type="email" id="profile-email" name="profile-email" class="form-control" value="%%=v(@Email)=%%" required/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="profile-mobile-phone" class="form-label">Mobile Phone</label>
+                                        <input type="tel" id="profile-mobile-phone" name="profile-mobile-phone" class="form-control" value="%%=v(@MobilePhone)=%%" required/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="profile-Street-1" class="form-label">Street Line 1</label>
+                                        <input type="text" id="profile-Street-1" name="profile-street-1" class="form-control" value="%%=v(@Street)=%%" required/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="profile-Street-2" class="form-label">Street Line 2</label>
+                                        <input type="text" id="profile-Street-2" name="profile-street-2" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="profile-city" class="form-label">City</label>
+                                        <input type="text" id="profile-city" name="profile-city" class="form-control" value="%%=v(@City)=%%" required/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="profile-state" class="form-label">State/Province/Region</label>
+                                        <input type="text" id="profile-state" name="profile-state" class="form-control" value="%%=v(@State)=%%" required/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="profile-postal-code" class="form-label">ZIP/Postal Code</label>
+                                        <input type="text" id="profile-postal-code" name="profile-postal-code" class="form-control" value="%%=v(@PostalCode)=%%" required/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="profile-country" class="form-label">Country</label>
+                                        <input type="text" id="profile-country" name="profile-country" class="form-control" value="%%=v(@Country)=%%" required/>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Opt-In</h2>
+
+       %%[ IF @HasOptedOutOfEmail == "True" THEN ]%%
+       
+       <p>You have unsubscribed from all e-mail publications. If you wish to resubscribe, click the Resubscribe button below.</p>
+
+                            <form action="#" method="post" class="subscription">
+                               <input name="subscribe" type="hidden" value="true">
+                               <button type="submit" class="btn btn-primary">Resubscribe</button>
+                            </form>
+                            
+       %%[ ELSE ]%%
+       
+                            <form action="#" method="post" class="subscription">
+                                <input name="update-preferences" type="hidden" value="true">
+                                <input name="preference-unknown" type="hidden" value="%%=v(@UnknownEmailGroups)=%%">
+                                <div>
+                                    <input type="checkbox" id="preference-newsletter" name="preference-newsletter" %%=v(IIF(@MarketingEmailGroup == "True", "checked", ""))=%%/>
+                                    <label for="preference-newsletter" class="form-label">News and Events</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="preference-events" name="preference-events" %%=v(IIF(@ProgramsEmailGroup == "True", "checked", ""))=%%/>
+                                    <label for="preference-events" class="form-label">Program Announcements</label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Update Preferences</button>
+                            </form>
+
+                            <form id="unsubscribe-form" action="%%=RequestParameter('PAGEURL')=%%" method="post" class="subscription">
+                               <input name="unsubscribe" type="hidden" value="true">
+                             <a href="#" class="unsubscribe">Unsubscribe All</a>
+                             <script>
+                              $(document).ready(function(){
+                               $('.unsubscribe').click(function(event){
+                                event.preventDefault()
+
+                                $('#unsubscribe-form').submit()
+                               })
+                              })
+                             </script>
+
+                            </form>
+                            
+       %%[ ENDIF ]%%
+                        </div>
+                    </div>
+                </div>
+            </div>
+           %%[ ENDIF ]%%
+        </div>
+    </body>
+</html>
+<script runat="server">
+  }catch(e){
+    Write(Stringify(e));
+  }
+</script>

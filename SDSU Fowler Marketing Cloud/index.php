@@ -17,6 +17,11 @@
         </nav>
 
         <div class="container">
+
+            <div class="alert alert-primary" role="alert">
+                Your profile has been updated.
+            </div>
+
             <div class="row">
                 <div class="col-lg-9">
                     <div class="card">
@@ -73,7 +78,7 @@
                                         <input type="text" id="profile-country" class="form-control" required/>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Update Preferences</button>
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
                             </form>
                         </div>
                     </div>

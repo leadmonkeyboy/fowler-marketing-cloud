@@ -1,0 +1,109 @@
+<!DOCTYPE {{{ page.doctype || 'html' }}}>
+<html lang="{{ page.language || 'en' }}" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="{{ page.charset || 'utf-8' }}">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <!--[if mso]>
+    <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+    <style>
+      td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+    </style>
+  <![endif]-->
+  <if condition="page.title">
+    <title>{{{ page.title }}}</title>
+  </if>
+  <if condition="page.googleFonts">
+    <link href="https://fonts.googleapis.com/css?family={{ page.googleFonts }}" rel="stylesheet" media="screen">
+  </if>
+  <if condition="page.css">
+    <style>{{{ page.css }}}</style>
+  </if>
+  <block name="head"></block>
+</head>
+<body class="{{ page.bodyClass || ' ' }}">
+  <if condition="page.preheader">
+    <div class="hidden">{{{ page.preheader }}}&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &zwnj;
+      &#160;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847; &zwnj;
+      &#160;&#847; &#847; &#847; &#847; &#847; </div>
+  </if>
+  <div role="article" aria-roledescription="email" aria-label="{{{ page.title || '' }}}" lang="{{ page.language || 'en' }}">
+
+    <table class="w-full">
+      <tr>
+      <td align="center" class="bg-white">
+          <!--[if (gte mso 9)|(IE)]>
+            <table align="center" class="w-900"><tr><td align="center" class="align-top w-900">
+          <![endif]-->
+          <table class="w-full max-w-900 min-w-600">
+            <tr>
+              <td align="center" class="align-top">
+                <p class="text-right text-sm font-sans lg:mx-16 mx-48">View this email in your <a class="text-red" href="%%view_email_url%%">browser</a>.</p>
+
+                <table class="w-full">
+                  <tr>
+                    <!-- LEFT GUTTER -->
+                    <td class="lg:w-16 w-48 align-top">
+                      <div class="w-full leading-64 bg-gray-dark">&zwnj;</div>
+                    </td>
+                    <!-- LOGO -->
+                    <td class="bg-red-1000 align-top w-210">
+                      <img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/642a6b7a-eaf9-473a-98e6-51c3b5404033.png" width="210" height="210" alt="SDSU Global Campus"/>
+                    </td>
+                    <!-- MENU -->
+                    <td class="align-top text-right">
+                      <div class="w-full leading-64 bg-gray-dark font-sans">
+                        <span class="leading-64">&zwnj;</span>
+                        <span class="md:hidden leading-64">
+                          <a class="text-white text-base no-underline mr-5" href="#">APPLY</a>
+                          <a class="text-white text-base no-underline mx-5" href="#">PROGRAM INFORMATION</a>
+                          <a class="text-white text-base no-underline ml-5" href="#">LEARN MORE</a>
+                        </span>
+                      </div>
+                      <if condition="page.partnerLogoUrl">
+                        <img class="mt-16 ml-16" src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
+                      </if>
+                    </td>
+                    <!-- RIGHT GUTTER -->
+                    <td class="lg:w-16 w-48 align-top">
+                      <div class="w-full leading-64 bg-gray-dark">&zwnj;</div>
+                    </td>
+                  </tr>
+                </table>
+                <table class="w-full">
+                  <tr>
+                    <!-- LEFT GUTTER -->
+                    <td class="lg:w-16 w-48 align-top">
+                    <!-- CONTENT -->
+                    <td class="font-sans text-base pt-16 pb-16">
+                      <block name="template"></block>
+                    </td>
+                    <!-- RIGHT GUTTER -->
+                    <td class="lg:w-16 w-48 align-top">
+                  </tr>
+                  <tr>
+                    <!-- LEFT GUTTER -->
+                    <td class="bg-gray-dark">&zwnj;</td>
+                    <!-- FOOTER -->
+                    <td class="bg-gray-dark">
+                      <component src="src/components/footer.html"/>
+                    </td>
+                    <!-- RIGHT GUTTER -->
+                    <td class="bg-gray-dark">&zwnj;</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!--[if (gte mso 9)|(IE)]>
+            </td></tr></table>
+          <![endif]-->
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
+<custom name="opencounter" type="tracking"/>

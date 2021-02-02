@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="index.php" />
+    <Compile Include="letterhead.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\bootstrap\" />
@@ -109,6 +110,15 @@
     <Folder Include="css\bootstrap\site\static\docs\5.0\assets\js\" />
     <Folder Include="images\" />
     <Folder Include="css\" />
+    <Folder Include="maizzle\" />
+    <Folder Include="maizzle\src\" />
+    <Folder Include="maizzle\src\assets\" />
+    <Folder Include="maizzle\src\assets\css\" />
+    <Folder Include="maizzle\src\assets\css\custom\" />
+    <Folder Include="maizzle\src\assets\images\" />
+    <Folder Include="maizzle\src\components\" />
+    <Folder Include="maizzle\src\layouts\" />
+    <Folder Include="maizzle\src\templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="compilerconfig.json.defaults">
@@ -118,6 +128,19 @@
     <Content Include="css\fowler.css" />
     <Content Include="css\fowler.min.css" />
     <Content Include="css\variables.scss" />
+    <Content Include="maizzle\config.js" />
+    <Content Include="maizzle\config.production.js" />
+    <Content Include="maizzle\src\assets\css\custom\reset.css" />
+    <Content Include="maizzle\src\assets\css\custom\utilities.css" />
+    <Content Include="maizzle\src\assets\css\main.css" />
+    <Content Include="maizzle\src\assets\images\maizzle.png" />
+    <Content Include="maizzle\src\components\footer.html" />
+    <Content Include="maizzle\src\components\vmlbg.html" />
+    <Content Include="maizzle\src\layouts\master-marketing.html" />
+    <Content Include="maizzle\src\layouts\master-letterhead.html" />
+    <Content Include="maizzle\src\templates\sdsu-letterhead-default.html" />
+    <Content Include="maizzle\src\templates\sdsu-marketing-default.html" />
+    <Content Include="maizzle\tailwind.config.js" />
     <None Include="compilerconfig.json" />
     <Content Include="css\bootstrap\.babelrc.js" />
     <Content Include="css\bootstrap\.browserslistrc" />

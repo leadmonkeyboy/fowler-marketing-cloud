@@ -7425,6 +7425,12 @@ a {
   box-shadow: 0 0 8px -5px;
   margin-bottom: 2.0rem; }
 
+.alert.alert-primary {
+  background-color: rgba(166, 25, 46, 0.5);
+  border-color: #A6192E;
+  color: #212529;
+  padding: 1.0em 2.0em; }
+
 form.profile {
   text-align: center; }
   form.profile label {
