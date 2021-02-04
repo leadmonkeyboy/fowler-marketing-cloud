@@ -1,6 +1,5 @@
 ---
 title: "SDSU Letterhead (Default)"
-preheader: "Hello World"
 social: "true"
 partnerLogoUrl: "https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/6f2d3703-5883-472b-92b0-0ffb8bc794cb.png"
 partnerLogoAlt: "SDSU Fowler College of Business"
@@ -9,19 +8,19 @@ partnerLogoAlt: "SDSU Fowler College of Business"
 <extends src="src/layouts/master-letterhead.html">
   <block name="template">
     <if condition="page.env === 'production'">
-      <div data-type="slot" data-key="b4o7auezhr9" data-label="Drop blocks or content here"></div>
+      <div data-type="slot" data-key="a64hujsf6ov" data-label="Drop blocks or content here"></div>
     </if>
     <else>
       <p>Dear %%First Name%%,</p>
-      <p>Hello! This is %%Owner First Name%% %%Owner Last Name%% from San Diego State University, just checking in with you again about our Bachelor of Science in Business Administration Online Degree Completion Program.</p>
+      <p>Hello! This is %%=v(@ownerFirstName)=%% %%=v(@ownerLastName)=%% from San Diego State University, just checking in with you again about our Bachelor of Science in Business Administration Online Degree Completion Program.</p>
       <p>Remember, the application window for fall 2021 is now open. If you still have questions about the program, I’d like to reconnect and see if I can help you plan the next steps in your academic journey. I wouldn’t want you to miss out on your opportunity to apply and begin classes later this year.</p>
       <p>This degree-completion program will give you an opportunity to earn the same Business degree as on-ground SDSU students in just two years. The program is fully online and taught by the same faculty and lecturers that teach on-campus courses at the esteemed SDSU Fowler College of Business.</p>
       <p>If you've completed the required courses with 60 or more units and completed all the prerequisites and admission requirements, we'd love to have you apply for the program.</p>
-      <p>If you'd like more information about the program, including a full list of admission requirements and detailed application instructions, please visit neverstoplearning.net/onlinebusiness. You can also contact me by calling %%Owner Phone%%, by email at %%Owner Email%%, or you can find time on my calendar by clicking here: %%Owner Calendar%%.</p>
+      <p>If you'd like more information about the program, including a full list of admission requirements and detailed application instructions, please visit neverstoplearning.net/onlinebusiness. You can also contact me by calling %%=v(@ownerPhone)=%%, by email at <a href="mailto:%%=v(@ownerEmail)=%%">%%=v(@ownerEmail)=%%</a>, or you can find time on my calendar by clicking here: <a href="%%=v(@ownerCalendar)=%%">%%=v(@ownerCalendar)=%%</a>.</p>
       <p>I look forward to speaking with you again about continuing your education with SDSU Global Campus!</p>
       <p>Thank you,</p>
       <p>
-        %%Owner First Name%% %%Owner Last Name%%<br>
+        %%=v(@ownerFirstName)=%% %%=v(@ownerLastName)=%%<br>
         SDSU Global Campus<br>
         San Diego State University
       </p>

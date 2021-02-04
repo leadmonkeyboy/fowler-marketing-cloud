@@ -1,11 +1,20 @@
-<if condition="page.social === 'true'">
-  <p class="text-center">
-    <a class="md:mx-5 mr-16" href="#"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/032f4ab4-bd2e-47b1-824d-5a15dd3bea78.png" width="52" height="52" alt=""/></a>
-    <a class="md:mx-5 mx-16" href="#"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/fce1caa8-dbf2-4398-9a70-4161f23c9ad8.png" width="52" height="52" alt=""/></a>
-    <a class="md:mx-5 mx-16" href="#"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/e96e46fa-bbfa-4059-af09-1dde1754045c.png" width="52" height="52" alt=""/></a>
-    <a class="md:mx-5 ml-16" href="#"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/fc5041e7-606c-4b0b-930d-d656768708f0.png" width="52" height="52" alt=""/></a>
-  </p>
+<div class="leading-16">&zwnj;</div>
+<if condition="page.env === 'production'">
+  <div data-type="slot" data-key="qubtdego0i" data-label="Add Social Media Icons Here (Use Social Media Icons Content)"></div>
 </if>
+<else>
+  <if condition="page.social === 'true'">
+    <p class="text-center">
+      <a href="https://www.facebook.com/SDSUglobalcampus"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/e3868f31-2625-4951-b92b-07d09f97aac2.png" width="52" height="52" alt=""/></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="https://www.linkedin.com/school/sdsu-global-campus"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/d7d93030-0924-4239-80ef-857ce1b58de1.png" width="52" height="52" alt=""/></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="https://twitter.com/SDSUglobal"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/76151f80-201f-4297-b493-ff3f48822799.png" width="52" height="52" alt=""/></a>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="https://youtube.com/sdsuglobalcampus"><img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/64346d17-f2fd-45f4-bae2-a4e1e3c1406e.png" width="52" height="52" alt=""/></a>
+    </p>
+  </if>
+</else>
 <p class="font-sans text-s text-white text-center">
   %%Member_Busname%%<br/>
   %%Member_Addr%% %%Member_City%%, %%Member_State%%, %%Member_PostalCode%%, %%Member_Country%%<br/>
@@ -13,3 +22,4 @@
   <a class="text-white" href="%%profile_center_url%%">Update Communication Preferences</a> |
   <a class="text-white" href="%%profile_center_url%%">Unsubscribe</a>
 </p>
+<div class="leading-16">&zwnj;</div>

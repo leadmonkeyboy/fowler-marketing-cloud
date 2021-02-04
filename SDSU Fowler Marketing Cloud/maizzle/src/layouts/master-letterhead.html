@@ -30,7 +30,6 @@
       &#160;&#847; &#847; &#847; &#847; &#847; </div>
   </if>
   <div role="article" aria-roledescription="email" aria-label="{{{ page.title || '' }}}" lang="{{ page.language || 'en' }}">
-
     <table class="w-full">
       <tr>
       <td align="center" class="bg-white">
@@ -54,17 +53,29 @@
                     </td>
                     <!-- MENU -->
                     <td class="align-top text-right">
-                      <div class="w-full leading-64 bg-gray-dark font-sans">
-                        <span class="leading-64">&zwnj;</span>
-                        <span class="md:hidden leading-64">
-                          <a class="text-white text-base no-underline mr-5" href="#">APPLY</a>
-                          <a class="text-white text-base no-underline mx-5" href="#">PROGRAM INFORMATION</a>
-                          <a class="text-white text-base no-underline ml-5" href="#">LEARN MORE</a>
-                        </span>
+                      <table class="w-full bg-gray-dark">
+                        <tr>
+                          <td class="leading-64 font-sans w-16">&zwnj;</td>
+                          <td class="leading-64 font-sans text-right">
+                            <if condition="page.env === 'production'">
+                              <div data-type="slot" data-key="otw2fwv23k" data-label="Add Header Links Here (Use Free Form Block)"></div>
+                            </if>
+                            <else>
+                              <a class="text-white text-base no-underline ml-5" href="#">LEARN MORE</a>
+                            </else>
+                          </td>
+                        </tr>
+                      </table>
+                      <div class="mt-16 ml-16">
+                        <if condition="page.env === 'production'">
+                          <div data-type="slot" data-key="ngclo07el7f" data-label="Add Partner Logo Here (Use Image Block)"></div>
+                        </if>
+                        <else>
+                          <if condition="page.partnerLogoUrl">
+                            <img src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
+                          </if>
+                        </else>
                       </div>
-                      <if condition="page.partnerLogoUrl">
-                        <img class="mt-16 ml-16" src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
-                      </if>
                     </td>
                     <!-- RIGHT GUTTER -->
                     <td class="lg:w-16 w-48 align-top">

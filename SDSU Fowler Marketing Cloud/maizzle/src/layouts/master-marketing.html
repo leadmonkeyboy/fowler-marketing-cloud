@@ -50,9 +50,17 @@
                       <td class="align-top">
                         <img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/642a6b7a-eaf9-473a-98e6-51c3b5404033.png" width="210" height="210" alt="SDSU Global Campus"/>
                         <h1 class="mt-72 font-sans text-white ">{{ page.title }}</h1>
-                        <if condition="page.partner_logo_url">
-                          <img class="mt-16 ml-16" src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
-                        </if>
+
+                        <div class="mt-16 ml-16">
+                          <if condition="page.env === '_production'">
+                            <div data-type="slot" data-key="pfy7mxr47t" data-label="Add Partner Logo Here"></div>
+                          </if>
+                          <else>
+                            <if condition="page.partner_logo_url">
+                              <img src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
+                            </if>
+                          </else>
+                        </div>
                       </td>
                       <!-- RIGHT GUTTER -->
                       <td class="lg:w-16 w-48 align-top">&zwnj;</td>
