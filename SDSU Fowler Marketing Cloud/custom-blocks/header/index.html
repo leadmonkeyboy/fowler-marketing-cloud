@@ -1,0 +1,101 @@
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+		<link href="salesforce-lightning-design-system.min.css" rel="stylesheet" />
+		<style>
+			html {
+				background-color: transparent;
+			}
+		</style>
+	</head>
+	<body>
+
+	<div id="settings" class="slds-form">
+		<div class="slds-form-element slds-form-element_stacked">
+			<label class="slds-form-element__label" for="headline">Headline</label>
+			<div class="slds-form-element__control">
+				<input id="headline" class="slds-input" name="headline" type="text" placeholder="Enter headline here"/>
+			</div>
+		</div>
+		<div class="slds-form-element slds-form-element_stacked">
+			<label class="slds-form-element__label" for="logo-image-url">Logo Image URL (210px X 210px)</label>
+			<div class="slds-form-element__control">
+				<input id="logo-image-url" class="slds-input" name="logo-image-url" type="text" placeholder="Enter logo image URL here (ensure the URL starts with https://"/>
+			</div>
+		</div>
+		<div class="slds-form-element slds-form-element_stacked">
+			<label class="slds-form-element__label" for="logo-alt-text">Logo Alternative Text</label>
+			<div class="slds-form-element__control">
+				<input id="logo-alt-text" class="slds-input" name="logo-alt-text" type="text" placeholder="Enter logo alternative text here"/>
+			</div>
+		</div>
+		<div class="slds-form-element slds-form-element_stacked">
+			<label class="slds-form-element__label" for="background-image-url">Background Image URL</label>
+			<div class="slds-form-element__control">
+				<input id="background-image-url" class="slds-input" name="background-image-url" type="text" placeholder="Enter background image URL here (ensure the URL starts with https://)"/>
+			</div>
+		</div>
+	</div>
+	
+	<template id="template">
+		<!--[if mso]>
+			<v:image src="{{backgroundImageUrl}}" xmlns:v="urn:schemas-microsoft-com:vml" style="width:900px;height:345px;" />
+			<v:rect fill="false" stroke="false" style="position:absolute;width:900px;height:345px;">
+			<v:textbox inset="0,0,0,0"><div><![endif]-->
+		<table style="background-size: cover; background-image: url('{{backgroundImageUrl}}'); width: 100%;" cellpadding="0" cellspacing="0" role="presentation">
+			<tr> <td style="vertical-align: top; width: 48px;" valign="top">&zwnj;</td> <td style="vertical-align: top;" valign="top">
+					<img src="{{logoImageUrl}}" width="210" height="210" alt="{{logoAltText}}" style="border: 0; line-height: 100%; max-width: 100%; vertical-align: middle;">
+					<h1 style="font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; margin-top: 72px; color: #ffffff;">
+						{{headline}}
+					</h1>
+				</td> <td style="vertical-align: top; width: 48px;" valign="top">&zwnj;</td>
+			</tr>
+		</table>
+		<!--[if mso]></div></v:textbox></v:rect><![endif]-->
+	</template>
+
+	<script src="blocksdk.js"></script>
+		<script>
+			$(document).ready(function(){
+
+				var sdk = new window.sfdc.BlockSDK(['blocktester.herokuapp.com', 'localhost', 'marketingcloudapps.com'], true);
+
+				var html = $('#template').html();
+				var template = Handlebars.compile(html);
+
+				sdk.getContent(function(content) {
+					
+					sdk.getData(function(data){
+						$('#headline').val(data.headline);
+						$('#logo-image-url').val(data.logoImageUrl);
+						$('#logo-alt-text').val(data.logoAltText);
+						$('#background-image-url').val(data.backgroundImageUrl);
+					});
+
+					function saveState() {
+						sdk.getData(function(data) {
+							
+							data.headline = $('#headline').val();
+							data.logoImageUrl = $('#logo-image-url').val();
+							data.logoAltText = $('#logo-alt-text').val();
+							data.backgroundImageUrl = $('#background-image-url').val();
+
+							var content = template(data);
+
+							sdk.setContent(content);
+							sdk.setSuperContent(content);
+
+							sdk.setData(data);
+						});
+					}
+
+					$('#headline').change(saveState);
+					$('#logo-image-url').change(saveState);
+					$('#logo-alt-text').change(saveState);
+					$('#background-image-url').change(saveState);
+				});
+			});
+		</script>
+	</body>
+</html>

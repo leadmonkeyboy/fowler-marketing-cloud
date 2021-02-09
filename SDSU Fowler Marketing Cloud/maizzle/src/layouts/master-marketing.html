@@ -12,9 +12,14 @@
       td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
     </style>
   <![endif]-->
-  <if condition="page.title">
-    <title>{{{ page.title }}}</title>
+  <if condition="page.env === 'production'">
+    <title>SDSU Global Campus</title>
   </if>
+  <else>
+    <if condition="page.title">
+      <title>{{{ page.title }}}</title>
+    </if>
+  </else>
   <if condition="page.googleFonts">
     <link href="https://fonts.googleapis.com/css?family={{ page.googleFonts }}" rel="stylesheet" media="screen">
   </if>
@@ -41,104 +46,84 @@
             <tr>
               <td align="center" class="align-top">
                 <p class="text-right text-sm font-sans lg:mx-16 mx-48">View this email in your <a class="text-red" href="%%view_email_url%%">browser</a>.</p>
-                <component src="src/components/vmlbg.html" locals='{"src": "{{{ page.heroBackgroundUrl }}}", "width": "900", "height": "345"}'>
-                  <table class="w-full" style="background-size: cover; background-image: url('{{{ page.heroBackgroundUrl }}}');">
-                    <tr>
-                      <!-- LEFT GUTTER -->
-                      <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                      <!-- HERO -->
-                      <td class="align-top">
-                        <img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/642a6b7a-eaf9-473a-98e6-51c3b5404033.png" width="210" height="210" alt="SDSU Global Campus"/>
-                        <h1 class="mt-72 font-sans text-white ">{{ page.title }}</h1>
-
-                        <div class="mt-16 ml-16">
-                          <if condition="page.env === '_production'">
-                            <div data-type="slot" data-key="pfy7mxr47t" data-label="Add Partner Logo Here"></div>
-                          </if>
-                          <else>
-                            <if condition="page.partner_logo_url">
-                              <img src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
-                            </if>
-                          </else>
-                        </div>
-                      </td>
-                      <!-- RIGHT GUTTER -->
-                      <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                    </tr>
-                  </table>
-                </component>
+                <if condition="page.env === 'production'">
+                  <div data-type="slot" data-key="jue865pl6jn" data-label="Add Header Here (Use Live Text Header)"></div>
+                </if>
+                <else>
+                  <component src="src/components/vmlbg.html" locals='{"src": "{{{ page.heroBackgroundUrl }}}", "width": "900", "height": "345"}'>
+                    <table class="w-full" style="background-size: cover; background-image: url('{{{ page.heroBackgroundUrl }}}');">
+                      <tr>
+                        <!-- LEFT GUTTER -->
+                        <td class="w-48 align-top">&zwnj;</td>
+                        <!-- HERO -->
+                        <td class="align-top">
+                          <img src="https://image.s11.sfmc-content.com/lib/fe3211717164057c7c1c70/m/1/642a6b7a-eaf9-473a-98e6-51c3b5404033.png" width="210" height="210" alt="SDSU Global Campus"/>
+                          <h1 class="mt-72 font-sans text-white ">
+                            {{ page.title }}
+                          </h1>
+                        </td>
+                        <!-- RIGHT GUTTER -->
+                        <td class="w-48 align-top">&zwnj;</td>
+                      </tr>
+                    </table>
+                  </component>
+                </else>
 
                 <!-- INTRODUCTION -->
                 <table class="w-full">
                   <tr>
                     <!-- LEFT GUTTER -->
-                    <td class="lg:w-16 w-48 align-top">&zwnj;</td>
+                    <td class="w-48 align-top">&zwnj;</td>
                     <!-- CONTENT -->
                     <td class="font-sans text-base pt-16 pb-16">
-                      <block name="introduction"></block>
+
+                      <table class="w-full">
+                        <tr>
+                          <td class="align-top text-red text-2xl font-bold">
+                            <if condition="page.env === 'production'">
+                              <div data-type="slot" data-key="a6zo7nxs16m" data-label="Add Subhead Here (Use Text Block)"></div>
+                            </if>
+                            <else>
+                                Finish Your Business Degree with SDSU<br/>
+                                Apply by March 1
+                            </else>
+                          </td>
+                          <td class="text-right align-top pl-32">
+                            <if condition="page.env === 'production'">
+                              <div data-type="slot" data-key="pfy7mxr47t" data-label="Add Partner Logo Here (Use Image Block)"></div>
+                            </if>
+                            <else>
+                              <if condition="page.partnerLogoUrl">
+                                <img src="{{{ page.partnerLogoUrl }}}" alt="{{{ page.partnerLogoAlt }}}"/>
+                              </if>
+                            </else>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <div style="line-height: 16px;">&zwnj;</div>
+
+                      <if condition="page.env === 'production'">
+                        <div data-type="slot" data-key="jdpkk8mm1ym" data-allowed-blocks="" data-max-blocks="" data-label="Drop blocks or content here"></div>
+                      </if>
+                      <else>
+                        <block name="introduction"></block>
+
+                        <!-- PROGRAM HIGHLIGHTS BANNER -->
+                        <div class="-mx-48 w-full-nm-48">
+                          <component src="src/components/banner.html" locals='{ "src": "{{ page.programHighlightsBackgroundUrl }}", "width": "900", "height": "96" }'>PROGRAM HIGHLIGHTS</component>
+                        </div>
+                        <block name="program-highlights"></block>
+
+                        <!-- PROGRAM HIGHLIGHTS BANNER -->
+                        <div class="-mx-48 w-full-nm-48">
+                          <component src="src/components/banner.html" locals='{ "src": "{{ page.learnMoreBackgroundUrl }}", "width": "900", "height": "145" }'>WANT TO LEARN MORE?</component>
+                        </div>
+                        <block name="learn-more"></block>
+                      </else>
                     </td>
                     <!-- RIGHT GUTTER -->
-                    <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                  </tr>
-                </table>
-
-                <!-- PROGRAM HIGHLIGHTS BANNER -->
-                <component src="src/components/vmlbg.html" locals='{"src": "{{{ page.programHighlightsBackgroundUrl }}}", "width": "900", "height": "145"}'>
-                  <table class="w-full" style="background-size: cover; background-image: url('{{{ page.programHighlightsBackgroundUrl }}}');">
-                    <tr>
-                      <!-- LEFT GUTTER -->
-                      <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                      <!-- CONTENT -->
-                      <td class="font-sans text-base pt-16 pb-16">
-                        <h2 class="text-white">PROGRAM HIGHLIGHTS</h2>
-                      </td>
-                      <!-- RIGHT GUTTER -->
-                      <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                    </tr>
-                  </table>
-                </component>
-
-                <!-- PROGRAM HIGHLIGHTS CONTENT -->
-                <table class="w-full">
-                  <tr>
-                    <!-- LEFT GUTTER -->
-                    <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                    <!-- CONTENT -->
-                    <td class="font-sans text-base pt-16 pb-16">
-                      <block name="program-highlights"></block>
-                    </td>
-                    <!-- RIGHT GUTTER -->
-                    <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                  </tr>
-                </table>
-
-                <!-- LEARN MORE BANNER -->
-                <component src="src/components/vmlbg.html" locals='{"src": "{{{ page.learnMoreBackgroundUrl }}}", "width": "900", "height": "145"}'>
-                  <table class="w-full" style="background-size: cover; background-image: url('{{{ page.learnMoreBackgroundUrl }}}');">
-                    <tr>
-                      <!-- LEFT GUTTER -->
-                      <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                      <!-- CONTENT -->
-                      <td class="font-sans text-base pt-16 pb-16">
-                        <h2 class="text-white">WANT TO LEARN MORE?</h2>
-                      </td>
-                      <!-- RIGHT GUTTER -->
-                      <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                    </tr>
-                  </table>
-                </component>
-
-                <!-- LEARN MORE CONTENT -->
-                <table class="w-full">
-                  <tr>
-                    <!-- LEFT GUTTER -->
-                    <td class="lg:w-16 w-48 align-top">&zwnj;</td>
-                    <!-- CONTENT -->
-                    <td class="font-sans text-base pt-16 pb-16">
-                      <block name="learn-more"></block>
-                    </td>
-                    <!-- RIGHT GUTTER -->
-                    <td class="lg:w-16 w-48 align-top">&zwnj;</td>
+                    <td class="w-48 align-top">&zwnj;</td>
                   </tr>
                 </table>
 
