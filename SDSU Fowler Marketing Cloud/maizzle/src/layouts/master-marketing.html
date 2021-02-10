@@ -47,7 +47,7 @@
               <td align="center" class="align-top">
                 <p class="text-right text-sm font-sans lg:mx-16 mx-48">View this email in your <a class="text-red" href="%%view_email_url%%">browser</a>.</p>
                 <if condition="page.env === 'production'">
-                  <div data-type="slot" data-key="jue865pl6jn" data-label="Add Header Here (Use Live Text Header)"></div>
+                  <div data-type="slot" data-key="jue865pl6jn" data-max-blocks="1" data-label="Add Header Here (Use Live Text Header)"></div>
                 </if>
                 <else>
                   <component src="src/components/vmlbg.html" locals='{"src": "{{{ page.heroBackgroundUrl }}}", "width": "900", "height": "345"}'>
